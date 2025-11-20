@@ -724,7 +724,7 @@ curl -H "X-API-Key: your-api-key" http://localhost:5000/force_start_pipeline
 For issues and feature requests, please:
 1. Check the logs for error messages
 2. Review the API documentation at `/docs`
-3. Report issues at https://github.com/anthropics/claude-code/issues
+3. Report issues at contact@synexian.com
 
 ## License
 
