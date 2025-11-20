@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cleverly API Documentation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .endpoint {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .method {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: white;
+            font-size: 0.9em;
+        }
+        .get { background-color: #28a745; }
+        .post { background-color: #007bff; }
+        .code {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        .response {
+            background: #e8f5e8;
+            border: 1px solid #c3e6c3;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .info-box {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .toc {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .toc li {
+            margin: 5px 0;
+        }
+        .toc a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        .toc a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 Cleverly API Documentation</h1>
+        <p>Access your CRM data through our RESTful API</p>
+        <p><strong>Base URL:</strong> <code>https://cleverly-api-server.replit.app</code></p>
+        <p><strong>API Status:</strong> ✅ Online | <strong>Last Updated:</strong> <span id="last-updated">Loading...</span></p>
+    </div>
+
+    <script>
+        // Check API status and display last update time
+        fetch('https://cleverly-api-server.replit.app/api/status')
+            .then(response => response.json())
+            .then(data => {
+                if (data.timestamp) {
+                    const timestamp = data.timestamp;
+                    const year = timestamp.substring(0, 4);
+                    const month = timestamp.substring(4, 6);
+                    const day = timestamp.substring(6, 8);
+                    const hour = timestamp.substring(9, 11);
+                    const minute = timestamp.substring(11, 13);
+                    document.getElementById('last-updated').textContent = 
+                        `${year}-${month}-${day} ${hour}:${minute} UTC`;
+                }
+            })
+            .catch(() => {
+                document.getElementById('last-updated').textContent = 'Unable to fetch';
+            });
+    </script>
+
+    <div class="toc">
+        <h2>📋 Table of Contents</h2>
+        <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#health">Health Check</a></li>
+            <li><a href="#status">API Status</a></li>
+            <li><a href="#combined-csv">Download Combined CSV</a></li>
+            <li><a href="#group-csv">Download Group CSV</a></li>
+            <li><a href="#json-data">Get JSON Data</a></li>
+            <li><a href="#curl-examples">cURL Examples</a></li>
+        </ul>
+    </div>
+
+    <div class="info-box">
+        <h3>🔄 Data Updates</h3>
+        <p>The API automatically refreshes data every 4 hours by running a pipeline that fetches the latest information from Monday.com and Calendly. Use the <code>/api/status</code> endpoint to check when data was last updated.</p>
+    </div>
+
+    <section id="overview">
+        <h2>📖 Overview</h2>
+        <p>The Cleverly API provides access to combined CRM data from Monday.com and Calendly. The data is automatically processed and categorized into different groups based on lead status.</p>
+
+        <h3>Available Groups:</h3>
+        <ul>
+            <li><code>scheduled</code> - Scheduled appointments</li>
+            <li><code>unqualified</code> - Unqualified leads</li>
+            <li><code>won</code> - Won deals</li>
+            <li><code>cancelled</code> - Cancelled appointments</li>
+            <li><code>noshow</code> - No-show appointments</li>
+            <li><code>proposal</code> - Proposals sent</li>
+            <li><code>lost</code> - Lost deals</li>
+        </ul>
+    </section>
+
+    <section id="health">
+        <div class="endpoint">
+            <h3><span class="method get">GET</span> / - Health Check</h3>
+            <p>Check if the API is running and healthy.</p>
+
+            <div class="code">curl https://cleverly-api-server.replit.app/</div>
+
+            <div class="response">
+                <strong>Response:</strong>
+                <pre>{
+  "status": "healthy",
+  "message": "API is running"
+}</pre>
+            </div>
+        </div>
+    </section>
+
+    <section id="status">
+        <div class="endpoint">
+            <h3><span class="method get">GET</span> /api/status - API Status</h3>
+            <p>Get information about the last data update and available files.</p>
+
+            <div class="code">curl https://cleverly-api-server.replit.app/api/status</div>
+
+            <div class="response">
+                <strong>Response:</strong>
+                <pre>{
+  "status": "Data available",
+  "timestamp": "20250807_183128",
+  "combined_csv": "sessions/combined_output_20250807_183128.csv",
+  "group_csvs": {
+    "cancelled": "sessions/sessions/cancelled_20250807_183128.csv",
+    "lost": "sessions/sessions/lost_20250807_183128.csv",
+    "noshow": "sessions/sessions/noshow_20250807_183128.csv",
+    "proposal": "sessions/sessions/proposal_20250807_183128.csv",
+    "scheduled": "sessions/sessions/scheduled_20250807_183128.csv",
+    "unqualified": "sessions/sessions/unqualified_20250807_183128.csv",
+    "won": "sessions/sessions/won_20250807_183128.csv"
+  },
+  "json_data": "sessions/sessions/data_20250807_183128.json"
+}</pre>
+            </div>
+        </div>
+    </section>
+
+    <section id="combined-csv">
+        <div class="endpoint">
+            <h3><span class="method get">GET</span> /api/combined_csv - Download Combined CSV</h3>
+            <p>Download the complete dataset as a CSV file containing all groups.</p>
+
+            <div class="code">curl -O https://cleverly-api-server.replit.app/api/combined_csv</div>
+
+            <p><strong>Response:</strong> CSV file download with all CRM data</p>
+        </div>
+    </section>
+
+    <section id="group-csv">
+        <div class="endpoint">
+            <h3><span class="method get">GET</span> /api/group_csv/{group} - Download Group CSV</h3>
+            <p>Download CSV data for a specific group. Replace <code>{group}</code> with one of the available groups.</p>
+
+            <div class="code">
+# Download scheduled appointments
+curl -O https://cleverly-api-server.replit.app/api/group_csv/scheduled
+
+# Download won deals
+curl -O https://cleverly-api-server.replit.app/api/group_csv/won
+
+# Download proposals
+curl -O https://cleverly-api-server.replit.app/api/group_csv/proposal
+            </div>
+
+            <p><strong>Response:</strong> CSV file download for the specified group</p>
+        </div>
+    </section>
+
+    <section id="json-data">
+        <div class="endpoint">
+            <h3><span class="method get">GET</span> /api/json - Get JSON Data</h3>
+            <p>Retrieve all data in JSON format, organized by groups.</p>
+
+            <div class="code">curl https://cleverly-api-server.replit.app/api/json</div>
+
+            <div class="response">
+                <strong>Response:</strong> JSON object with groups as keys and arrays of records as values
+                <pre>{
+  "scheduled": [
+    {
+      "Item ID": "123456",
+      "Name": "John Doe",
+      "Email": "john@example.com",
+      "Company": "Example Corp",
+      ...
+    }
+  ],
+  "won": [...],
+  "proposal": [...]
+}</pre>
+            </div>
+        </div>
+    </section>
+
+    <section id="api-testing">
+        <h2>🧪 Test the API</h2>
+        <div class="info-box">
+            <p>Click the buttons below to test the API endpoints directly:</p>
+            <button onclick="testEndpoint('/')" style="margin: 5px; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Test Health Check</button>
+            <button onclick="testEndpoint('/api/status')" style="margin: 5px; padding: 10px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Test API Status</button>
+            <button onclick="downloadFile('/api/combined_csv')" style="margin: 5px; padding: 10px; background: #17a2b8; color: white; border: none; border-radius: 4px; cursor: pointer;">Download Combined CSV</button>
+
+            <div id="test-results" style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 4px; min-height: 100px;">
+                <p><strong>Test Results:</strong> Click a button above to test the API endpoints.</p>
+            </div>
+        </div>
+
+        <script>
+        function testEndpoint(endpoint) {
+            console.log('Testing endpoint:', 'https://cleverly-api-server.replit.app' + endpoint);
+            document.getElementById('test-results').innerHTML = '<p><strong>Testing...</strong> ' + endpoint + '</p>';
+
+            fetch('https://cleverly-api-server.replit.app' + endpoint, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('test-results').innerHTML = 
+                        '<p><strong>✅ Success - ' + endpoint + ':</strong></p><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                })
+                .catch(error => {
+                    console.error('Test error:', error);
+                    document.getElementById('test-results').innerHTML = 
+                        '<p><strong>❌ Error - ' + endpoint + ':</strong></p><pre>' + error.message + '</pre>';
+                });
+        }
+
+        function downloadFile(endpoint) {
+            console.log('Downloading file:', 'https://cleverly-api-server.replit.app' + endpoint);
+            document.getElementById('test-results').innerHTML = '<p><strong>Initiating download...</strong> ' + endpoint + '</p>';
+
+            fetch('https://cleverly-api-server.replit.app' + endpoint, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'text/csv'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = endpoint.split('/').pop() + '.csv';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);
+                    document.getElementById('test-results').innerHTML = 
+                        '<p><strong>✅ Download completed:</strong> ' + endpoint + '</p>';
+                })
+                .catch(error => {
+                    console.error('Download error:', error);
+                    document.getElementById('test-results').innerHTML = 
+                        '<p><strong>❌ Download failed:</strong></p><pre>' + error.message + '</pre>';
+                });
+        }
+        </script>
+    </section>
+
+    <section id="curl-examples">
+        <h2>💻 Complete cURL Examples</h2>
+
+        <h3>Basic Usage</h3>
+        <div class="code">
+# Check API health
+curl https://cleverly-api-server.replit.app/
+
+# Get API status
+curl https://cleverly-api-server.replit.app/api/status
+
+# Download all data as CSV
+curl -O https://cleverly-api-server.replit.app/api/combined_csv
+
+# Get JSON data and save to file
+curl https://cleverly-api-server.replit.app/api/json -o data.json
+        </div>
+
+        <h3>Download Specific Groups</h3>
+        <div class="code">
+# Download all group CSVs
+curl -O https://cleverly-api-server.replit.app/api/group_csv/scheduled
+curl -O https://cleverly-api-server.replit.app/api/group_csv/won
+curl -O https://cleverly-api-server.replit.app/api/group_csv/proposal
+curl -O https://cleverly-api-server.replit.app/api/group_csv/cancelled
+curl -O https://cleverly-api-server.replit.app/api/group_csv/lost
+curl -O https://cleverly-api-server.replit.app/api/group_csv/noshow
+curl -O https://cleverly-api-server.replit.app/api/group_csv/unqualified
+        </div>
+
+        <h3>Advanced Usage with jq</h3>
+        <div class="code">
+# Pretty print JSON data
+curl https://cleverly-api-server.replit.app/api/json | jq .
+
+# Get only scheduled appointments
+curl https://cleverly-api-server.replit.app/api/json | jq '.scheduled'
+
+# Count records in each group
+curl https://cleverly-api-server.replit.app/api/json | jq 'to_entries | map({group: .key, count: (.value | length)})'
+
+# Get emails from won deals
+curl https://cleverly-api-server.replit.app/api/json | jq '.won[].Email'
+        </div>
+
+        <h3>Bash Script Example</h3>
+        <div class="code">
+#!/bin/bash
+# Download all data to local folder
+
+BASE_URL="https://cleverly-api-server.replit.app"
+DOWNLOAD_DIR="cleverly_data_$(date +%Y%m%d)"
+
+mkdir -p "$DOWNLOAD_DIR"
+cd "$DOWNLOAD_DIR"
+
+echo "Downloading Cleverly API data..."
+
+# Download combined CSV
+curl -O "$BASE_URL/api/combined_csv"
+
+# Download JSON data
+curl "$BASE_URL/api/json" -o data.json
+
+# Download individual group CSVs
+for group in scheduled won proposal cancelled lost noshow unqualified; do
+    echo "Downloading $group..."
+    curl -O "$BASE_URL/api/group_csv/$group"
+done
+
+echo "Download complete! Files saved to $DOWNLOAD_DIR"
+        </div>
+    </section>
+
+    <div class="info-box">
+        <h3>🔧 Error Handling</h3>
+        <p>All endpoints return appropriate HTTP status codes:</p>
+        <ul>
+            <li><code>200</code> - Success</li>
+            <li><code>404</code> - Resource not found</li>
+            <li><code>500</code> - Internal server error</li>
+        </ul>
+        <p>Error responses include a JSON object with an <code>error</code> field describing the issue.</p>
+    </div>
+
+    <div class="info-box">
+        <h3>📊 Data Fields</h3>
+        <p>Each record typically includes the following fields:</p>
+        <ul>
+            <li><code>Item ID</code> - Unique identifier</li>
+            <li><code>Name</code> - Contact name</li>
+            <li><code>Email</code> - Contact email</li>
+            <li><code>Phone</code> - Contact phone</li>
+            <li><code>Company</code> - Company name</li>
+            <li><code>Sales Call Date</code> - Scheduled call date</li>
+            <li><code>Deal Value</code> - Deal value in dollars</li>
+            <li><code>Deal Status</code> - Current deal status</li>
+            <li><code>Group</code> - Lead category</li>
+            <li><code>origin</code> - Lead source (LinkedIn or cold-email)</li>
+        </ul>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cleverly Data Hub - Enterprise Dashboard</title>
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-container" id="loginScreen">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="logo-container">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h1>Cleverly</h1>
+                </div>
+                <p class="login-subtitle">Enterprise Data Hub</p>
+            </div>
+            <div class="error-message" id="loginError"></div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required autocomplete="username" placeholder="Enter your username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="Enter your password">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block" id="loginBtn">
+                    <span class="btn-text">Sign In</span>
+                    <span class="btn-loader"></span>
+                </button>
+            </form>
+            <div class="login-footer">
+                <p>Secure enterprise data management platform</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div class="dashboard-container" id="dashboardScreen">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <div class="logo-mini">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <h1>Cleverly Data Hub</h1>
+            </div>
+            <div class="header-right">
+                <div class="status-indicator" id="apiStatusIndicator">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Connected</span>
+                </div>
+                <div class="user-menu">
+                    <span class="user-avatar" id="userAvatar">A</span>
+                    <span class="user-name" id="userName">Admin</span>
+                    <button class="btn-icon" onclick="logout()" title="Logout">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                            <polyline points="16,17 21,12 16,7"/>
+                            <line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Sidebar Navigation -->
+            <nav class="sidebar">
+                <div class="nav-section">
+                    <h3 class="nav-title">Overview</h3>
+                    <a href="#status" class="nav-item active" data-section="status">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"/>
+                            <rect x="14" y="3" width="7" height="7"/>
+                            <rect x="14" y="14" width="7" height="7"/>
+                            <rect x="3" y="14" width="7" height="7"/>
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+                <div class="nav-section">
+                    <h3 class="nav-title">Pipeline Operations</h3>
+                    <a href="#pipeline" class="nav-item" data-section="pipeline">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2"/>
+                        </svg>
+                        <span>Run Pipeline</span>
+                    </a>
+                    <a href="#monday" class="nav-item" data-section="monday">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14,2 14,8 20,8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                        <span>Monday Data</span>
+                    </a>
+                </div>
+                <div class="nav-section">
+                    <h3 class="nav-title">Calendly Extraction</h3>
+                    <a href="#calendly-live" class="nav-item" data-section="calendly-live">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12,6 12,12 16,14"/>
+                        </svg>
+                        <span>Live Extraction</span>
+                    </a>
+                    <a href="#calendly-session" class="nav-item" data-section="calendly-session">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7,10 12,15 17,10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        <span>Session Data</span>
+                    </a>
+                </div>
+                <div class="nav-section">
+                    <h3 class="nav-title">System</h3>
+                    <a href="#api-keys" class="nav-item" data-section="api-keys">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+                        </svg>
+                        <span>API Keys</span>
+                    </a>
+                    <a href="#docs" class="nav-item" data-section="docs">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                        </svg>
+                        <span>API Docs</span>
+                    </a>
+                </div>
+            </nav>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Status Section -->
+                <section id="status" class="content-section active">
+                    <div class="section-header">
+                        <h2>System Overview</h2>
+                        <p>Monitor your data pipeline status and system health</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon success">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                    <polyline points="22,4 12,14.01 9,11.01"/>
+                                </svg>
+                            </div>
+                            <div class="stat-content">
+                                <h3>API Status</h3>
+                                <p class="stat-value" id="statApiStatus">Healthy</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon primary">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12,6 12,12 16,14"/>
+                                </svg>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Last Pipeline Run</h3>
+                                <p class="stat-value" id="statLastRun">-</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon accent">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="17,8 12,3 7,8"/>
+                                    <line x1="12" y1="3" x2="12" y2="15"/>
+                                </svg>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Calendly Data</h3>
+                                <p class="stat-value" id="statCalendlyStatus">Not loaded</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon warning">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                    <line x1="16" y1="2" x2="16" y2="6"/>
+                                    <line x1="8" y1="2" x2="8" y2="6"/>
+                                    <line x1="3" y1="10" x2="21" y2="10"/>
+                                </svg>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Session Expires</h3>
+                                <p class="stat-value" id="statSessionExpires">-</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+                        <h3>Quick Actions</h3>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" onclick="runPipeline()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="5,3 19,12 5,21 5,3"/>
+                                </svg>
+                                Run Pipeline
+                            </button>
+                            <button class="btn btn-secondary" onclick="refreshStatus()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="23,4 23,10 17,10"/>
+                                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                                </svg>
+                                Refresh Status
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Pipeline Section -->
+                <section id="pipeline" class="content-section">
+                    <div class="section-header">
+                        <h2>Pipeline Operations</h2>
+                        <p>Execute and monitor data processing pipelines</p>
+                    </div>
+
+                    <div class="cards-grid">
+                        <div class="action-card">
+                            <div class="card-header">
+                                <div class="card-icon gradient-primary">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2"/>
+                                    </svg>
+                                </div>
+                                <span class="card-badge">Core</span>
+                            </div>
+                            <h3>Force Start Pipeline</h3>
+                            <p class="card-description">
+                                Manually trigger the complete data processing pipeline. This will fetch data from Monday.com,
+                                process Calendly events, and extract comprehensive Calendly data including users, events, and invitees.
+                                The pipeline runs in the background and updates all cached data.
+                            </p>
+                            <div class="card-meta">
+                                <span><strong>Endpoint:</strong> GET /force_start_pipeline</span>
+                                <span><strong>Duration:</strong> 5-15 minutes</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn btn-primary" onclick="executeAction('force_start_pipeline', 'GET', 'Running data pipeline...')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polygon points="5,3 19,12 5,21 5,3"/>
+                                    </svg>
+                                    Start Pipeline
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Monday Data Section -->
+                <section id="monday" class="content-section">
+                    <div class="section-header">
+                        <h2>Monday.com Data</h2>
+                        <p>Access and download processed Monday.com board data</p>
+                    </div>
+
+                    <div class="cards-grid">
+                        <div class="action-card">
+                            <div class="card-header">
+                                <div class="card-icon gradient-accent">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                        <polyline points="14,2 14,8 20,8"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <h3>Combined CSV Export</h3>
+                            <p class="card-description">
+                                Download the complete combined dataset from all Monday.com groups. This file contains
+                                all leads with their status, contact information, deal values, and origin tracking
+                                (LinkedIn, cold-email, cold-calling).
+                            </p>
+                            <div class="card-meta">
+                                <span><strong>Endpoint:</strong> GET /api/combined_csv</span>
+                                <span><strong>Format:</strong> CSV</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn btn-primary" onclick="downloadFile('/api/combined_csv', 'combined_data.csv')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                        <polyline points="7,10 12,15 17,10"/>
+                                        <line x1="12" y1="15" x2="12" y2="3"/>
+                                    </svg>
+                                    Download CSV
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="action-card">
+                            <div class="card-header">
+                                <div class="card-icon gradient-success">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                        <polyline points="14,2 14,8 20,8"/>
+                                        <line x1="16" y1="13" x2="8" y2="13"/>
+                                        <line x1="16" y1="17" x2="8" y2="17"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <h3>JSON Data Export</h3>
+                            <p class="card-description">
+                                Get the processed data in JSON format, organized by Monday.com groups. Ideal for
+                                integration with dashboards, analytics tools, or custom applications that consume JSON data.
+                            </p>
+                            <div class="card-meta">
+                                <span><strong>Endpoint:</strong> GET /api/json</span>
+                                <span><strong>Format:</strong> JSON</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn btn-primary" onclick="executeAction('api/json', 'GET', 'Fetching JSON data...')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="16,18 22,12 16,6"/>
+                                        <polyline points="8,6 2,12 8,18"/>
+                                    </svg>
+                                    View JSON
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="action-card">
+                            <div class="card-header">
+                                <div class="card-icon gradient-warning">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <h3>Group-Specific Data</h3>
+                            <p class="card-description">
+                                Download data for specific pipeline stages: scheduled, unqualified, won, cancelled,
+                                noshow, proposal, or lost. Each group contains leads at that specific stage of the sales funnel.
+                            </p>
+                            <div class="card-meta">
+                                <span><strong>Endpoint:</strong> GET /api/group_csv/{group}</span>
+                                <span><strong>Groups:</strong> scheduled, won, lost, etc.</span>
+                            </div>
+                            <div class="card-actions">
+                                <select id="groupSelect" class="form-select">
+                                    <option value="scheduled">Scheduled</option>
+                                    <option value="unqualified">Unqualified</option>
+                                    <option value="won">Won</option>
+                                    <option value="cancelled">Cancelled</option>
+                                    <option value="noshow">No Show</option>
+                                    <option value="proposal">Proposal</option>
+                                    <option value="lost">Lost</option>
+                                </select>
+                                <button class="btn btn-primary" onclick="downloadGroupCSV()">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                        <polyline points="7,10 12,15 17,10"/>
+                                        <line x1="12" y1="15" x2="12" y2="3"/>
+                                    </svg>
+                                    Download
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Calendly Live Extraction Section -->
+                <section id="calendly-live" class="content-section">
+                    <div class="section-header">
+                        <h2>Calendly Live Extraction</h2>
+                        <p>Extract fresh data directly from the Calendly API in real-time</p>
+                    </div>
+
+                    <div class="cards-grid">
+                        <div class="action-card">
+                            <div class="card-header">
+                                <div class="card-icon gradient-primary">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                        <circle cx="12" cy="7" r="4"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <h3>User Information</h3>
+                            <p class="card-description">
+                                Retrieve your Calendly account profile including name, email, timezone, scheduling URL,
+                                and organization details. Essential for verifying API connectivity and account status.
+                            </p>
+                            <div class="card-meta">
+                                <span><strong>Endpoint:</strong> GET /api/calendly/user-info</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn btn-primary" onclick="executeAction('api/calendly/user-info', 'GET', 'Fetching user info...')">
+                                    Fetch User Info
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="action-card">
+                            <div class="card-header">
+                                <div class="card-icon gradient-accent">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                        <circle cx="9" cy="7" r="4"/>
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <h3>Organization Members</h3>
+                            <p class="card-description">
+                                List all members of your Calendly organization with their roles, email addresses,
+                                and membership status. Useful for team management and access auditing.
+                            </p>
+                            <div class="card-meta">
+                                <span><strong>Endpoint:</strong> GET /api/calendly/organization-members</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn btn-primary" onclick="executeAction('api/calendly/organization-members', 'GET', 'Fetching members...')">
+                                    Fetch Members
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="action-card">
+                            <div class="card-header">
+                                <div class="card-icon gradient-success">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                        <line x1="16" y1="2" x2="16" y2="6"/>
+                                        <line x1="8" y1="2" x2="8" y2="6"/>
+                                        <line x1="3" y1="10" x2="21" y2="10"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <h3>Event Types</h3>
+                            <p class="card-description">
+                                Extract all event types from your organization and individual users. Includes event names,
+                                durations, scheduling URLs, and activity status. Great for analyzing booking options.
+                            </p>
+                            <div class="card-meta">
+                                <span><strong>Endpoint:</strong> GET /api/calendly/events</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn btn-primary" onclick="executeAction('api/calendly/events', 'GET', 'Extracting events...')">
+                                    Extract Events
+                                </button>
+                                <button class="btn btn-secondary" onclick="exportCalendlyData('events')">
+                                    Export CSV
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="action-card">
+                            <div class="card-header">
+                                <div class="card-icon gradient-warning">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                        <circle cx="8.5" cy="7" r="4"/>
+                                        <line x1="20" y1="8" x2="20" y2="14"/>
+                                        <line x1="23" y1="11" x2="17" y2="11"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <h3>Invitees Data</h3>
+                            <p class="card-description">
+                                Extract comprehensive invitee information from scheduled events over the past year.
+                                Includes contact details, booking answers, timezone, and UTM tracking data for marketing analysis.
+                            </p>
+                            <div class="card-meta">
+                                <span><strong>Endpoint:</strong> GET /api/calendly/invitees</span>
+                                <span><strong>Default:</strong> Past 365 days</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn btn-primary" onclick="executeAction('api/calendly/invitees', 'GET', 'Extracting invitees...')">
+                                    Extract Invitees
+                                </button>
+                                <button class="btn btn-secondary" onclick="exportCalendlyData('invitees')">
+                                    Export CSV
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="action-card featured">
+                            <div class="card-header">
+                                <div class="card-icon gradient-purple">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <line x1="2" y1="12" x2="22" y2="12"/>
+                                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                                    </svg>
+                                </div>
+                                <span class="card-badge featured">Recommended</span>
+                            </div>
+                            <h3>Comprehensive Extraction</h3>
+                            <p class="card-description">
+                                Perform a complete data extraction including user profile, organization members,
+                                all event types, and invitee data. This is the most thorough extraction option,
+                                combining all data sources into a single comprehensive dataset.
+                            </p>
+                            <div class="card-meta">
+                                <span><strong>Endpoint:</strong> GET /api/calendly/comprehensive</span>
+                                <span><strong>Duration:</strong> 2-5 minutes</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn btn-primary" onclick="executeAction('api/calendly/comprehensive', 'GET', 'Running comprehensive extraction...')">
+                                    Full Extraction
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Calendly Session Data Section -->
+                <section id="calendly-session" class="content-section">
+                    <div class="section-header">
+                        <h2>Calendly Session Data</h2>
+                        <p>Access pre-extracted Calendly data from the last pipeline run</p>
+                    </div>
+
+                    <div class="info-banner">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="16" x2="12" y2="12"/>
+                            <line x1="12" y1="8" x2="12.01" y2="8"/>
+                        </svg>
+                        <p>Session data is extracted automatically when the pipeline runs. Use these endpoints for faster access to cached data without making live API calls to Calendly.</p>
+                    </div>
+
+                    <div class="cards-grid">
+                        <div class="action-card">
+                            <div class="card-header">
+                                <div class="card-icon gradient-primary">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                        <polyline points="22,4 12,14.01 9,11.01"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <h3>Session Status</h3>
+                            <p class="card-description">
+                                Check the availability and status of all Calendly session data files. Shows file sizes,
+                                timestamps, and which data types are available for download.
+                            </p>
+                            <div class="card-meta">
+                                <span><strong>Endpoint:</strong> GET /api/calendly/session/status</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn btn-primary" onclick="executeAction('api/calendly/session/status', 'GET', 'Checking status...', false)">
+                                    Check Status
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="action-card">
+                            <div class="card-header">
+                                <div class="card-icon gradient-accent">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                        <circle cx="12" cy="7" r="4"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <h3>User Data (JSON)</h3>
+                            <p class="card-description">
+                                Get the cached user profile and organization information from the last pipeline extraction.
+                            </p>
+                            <div class="card-meta">
+                                <span><strong>Endpoint:</strong> GET /api/calendly/session/user</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn btn-primary" onclick="executeAction('api/calendly/session/user', 'GET', 'Loading user data...')">
+                                    View Data
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="action-card">
+                            <div class="card-header">
+                                <div class="card-icon gradient-success">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                        <line x1="16" y1="2" x2="16" y2="6"/>
+                                        <line x1="8" y1="2" x2="8" y2="6"/>
+                                        <line x1="3" y1="10" x2="21" y2="10"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <h3>Events Data</h3>
+                            <p class="card-description">
+                                Access cached event types data in JSON format or download as CSV for spreadsheet analysis.
+                            </p>
+                            <div class="card-meta">
+                                <span><strong>Endpoint:</strong> GET /api/calendly/session/events</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn btn-primary" onclick="executeAction('api/calendly/session/events', 'GET', 'Loading events...')">
+                                    View JSON
+                                </button>
+                                <button class="btn btn-secondary" onclick="downloadFile('/api/calendly/session/csv/events', 'calendly_events.csv')">
+                                    Download CSV
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="action-card">
+                            <div class="card-header">
+                                <div class="card-icon gradient-warning">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                        <circle cx="8.5" cy="7" r="4"/>
+                                        <line x1="20" y1="8" x2="20" y2="14"/>
+                                        <line x1="23" y1="11" x2="17" y2="11"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <h3>Invitees Data</h3>
+                            <p class="card-description">
+                                Access cached invitee data from scheduled events. Available in JSON or CSV format.
+                            </p>
+                            <div class="card-meta">
+                                <span><strong>Endpoint:</strong> GET /api/calendly/session/invitees</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn btn-primary" onclick="executeAction('api/calendly/session/invitees', 'GET', 'Loading invitees...')">
+                                    View JSON
+                                </button>
+                                <button class="btn btn-secondary" onclick="downloadFile('/api/calendly/session/csv/invitees', 'calendly_invitees.csv')">
+                                    Download CSV
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="action-card">
+                            <div class="card-header">
+                                <div class="card-icon gradient-purple">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                        <circle cx="9" cy="7" r="4"/>
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <h3>Members CSV</h3>
+                            <p class="card-description">
+                                Download organization members data as a CSV file for easy viewing in spreadsheets.
+                            </p>
+                            <div class="card-meta">
+                                <span><strong>Endpoint:</strong> GET /api/calendly/session/csv/members</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn btn-primary" onclick="downloadFile('/api/calendly/session/csv/members', 'calendly_members.csv')">
+                                    Download CSV
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="action-card">
+                            <div class="card-header">
+                                <div class="card-icon gradient-primary">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                        <polyline points="14,2 14,8 20,8"/>
+                                        <line x1="16" y1="13" x2="8" y2="13"/>
+                                        <line x1="16" y1="17" x2="8" y2="17"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <h3>Extraction Summary</h3>
+                            <p class="card-description">
+                                View the summary report from the last Calendly extraction, including statistics and any errors.
+                            </p>
+                            <div class="card-meta">
+                                <span><strong>Endpoint:</strong> GET /api/calendly/session/summary</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn btn-primary" onclick="executeAction('api/calendly/session/summary', 'GET', 'Loading summary...')">
+                                    View Summary
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- API Keys Management Section -->
+                <section id="api-keys" class="content-section">
+                    <div class="section-header">
+                        <h2>API Key Management</h2>
+                        <p>Create and manage API keys for programmatic access to your data</p>
+                    </div>
+
+                    <!-- Create New Key Form -->
+                    <div class="action-card" style="margin-bottom: 24px;">
+                        <div class="card-header">
+                            <div class="card-icon gradient-primary">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"/>
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3>Create New API Key</h3>
+                        <p class="card-description">
+                            Generate a new API key for external integrations. Keys can be used with curl, Python requests, or any HTTP client.
+                        </p>
+                        <form id="createKeyForm" class="key-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="keyName">Key Name *</label>
+                                    <input type="text" id="keyName" placeholder="e.g., Production Integration" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="keyPermission">Permission Level</label>
+                                    <select id="keyPermission" class="form-select">
+                                        <option value="read_only">Read Only - Can only read data</option>
+                                        <option value="standard" selected>Standard - Read + trigger pipelines</option>
+                                        <option value="admin">Admin - Full access</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="keyExpires">Expires In (Days)</label>
+                                    <input type="number" id="keyExpires" placeholder="Leave empty for no expiration" min="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="keyRateLimit">Rate Limit (req/min)</label>
+                                    <input type="number" id="keyRateLimit" value="100" min="1" max="1000">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="keyDescription">Description</label>
+                                <input type="text" id="keyDescription" placeholder="Optional description for this key">
+                            </div>
+                            <div class="card-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+                                    </svg>
+                                    Generate Key
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- New Key Display -->
+                    <div class="new-key-display" id="newKeyDisplay" style="display: none;">
+                        <div class="info-banner" style="border-color: var(--warning); background: rgba(245, 158, 11, 0.1);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                <line x1="12" y1="9" x2="12" y2="13"/>
+                                <line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                            <div>
+                                <strong>Store this key securely!</strong>
+                                <p>This is the only time you'll see this key. Copy it now and store it safely.</p>
+                            </div>
+                        </div>
+                        <div class="key-value-box">
+                            <code id="newKeyValue"></code>
+                            <button class="btn btn-secondary" onclick="copyNewKey()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                Copy
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Existing Keys List -->
+                    <div class="action-card">
+                        <div class="card-header">
+                            <h3 style="margin: 0;">Your API Keys</h3>
+                            <button class="btn btn-secondary" onclick="loadApiKeys()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="23,4 23,10 17,10"/>
+                                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                                </svg>
+                                Refresh
+                            </button>
+                        </div>
+                        <div id="apiKeysList" class="keys-list">
+                            <p class="loading-text">Loading keys...</p>
+                        </div>
+                    </div>
+
+                    <!-- Code Examples -->
+                    <div class="action-card" style="margin-top: 24px;">
+                        <div class="card-header">
+                            <div class="card-icon gradient-accent">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="16,18 22,12 16,6"/>
+                                    <polyline points="8,6 2,12 8,18"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3>Usage Examples</h3>
+                        <p class="card-description">
+                            Use your API key with these code examples to integrate with external platforms.
+                        </p>
+
+                        <div class="example-tabs">
+                            <button class="tab-btn active" onclick="showExampleTab('curl')">cURL</button>
+                            <button class="tab-btn" onclick="showExampleTab('python')">Python</button>
+                        </div>
+
+                        <div id="curlExample" class="example-content active">
+                            <h4>Get System Status</h4>
+                            <pre class="code-example">curl -X GET \
+  -H "X-API-Key: YOUR_API_KEY" \
+  "http://localhost:5000/api/status"</pre>
+
+                            <h4>Download Combined CSV</h4>
+                            <pre class="code-example">curl -X GET \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -o combined_data.csv \
+  "http://localhost:5000/api/combined_csv"</pre>
+
+                            <h4>Trigger Pipeline</h4>
+                            <pre class="code-example">curl -X GET \
+  -H "X-API-Key: YOUR_API_KEY" \
+  "http://localhost:5000/force_start_pipeline"</pre>
+
+                            <h4>Get Calendly Events</h4>
+                            <pre class="code-example">curl -X GET \
+  -H "X-API-Key: YOUR_API_KEY" \
+  "http://localhost:5000/api/calendly/events"</pre>
+                        </div>
+
+                        <div id="pythonExample" class="example-content">
+                            <h4>Get System Status</h4>
+                            <pre class="code-example">import requests
+
+api_key = "YOUR_API_KEY"
+url = "http://localhost:5000/api/status"
+
+headers = {
+    "X-API-Key": api_key
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())</pre>
+
+                            <h4>Download Combined CSV</h4>
+                            <pre class="code-example">import requests
+
+api_key = "YOUR_API_KEY"
+url = "http://localhost:5000/api/combined_csv"
+
+headers = {
+    "X-API-Key": api_key
+}
+
+response = requests.get(url, headers=headers)
+
+with open("combined_data.csv", "wb") as f:
+    f.write(response.content)
+
+print("Downloaded combined_data.csv")</pre>
+
+                            <h4>Get Calendly Invitees</h4>
+                            <pre class="code-example">import requests
+
+api_key = "YOUR_API_KEY"
+url = "http://localhost:5000/api/calendly/invitees"
+
+headers = {
+    "X-API-Key": api_key,
+    "Content-Type": "application/json"
+}
+
+# Optional: specify days_back parameter
+params = {"days_back": 90}
+
+response = requests.get(url, headers=headers, params=params)
+data = response.json()
+
+print(f"Total invitees: {len(data.get('invitees', []))}")</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- API Documentation Section -->
+                <section id="docs" class="content-section">
+                    <div class="section-header">
+                        <h2>API Documentation</h2>
+                        <p>Technical documentation for API integration</p>
+                    </div>
+
+                    <div class="docs-container">
+                        <div class="docs-nav">
+                            <h4>Authentication</h4>
+                            <p>All protected endpoints require authentication using one of these methods:</p>
+                            <div class="code-block">
+                                <code>Authorization: Bearer {session_token}</code>
+                            </div>
+                            <div class="code-block">
+                                <code>X-API-Key: {api_key}</code>
+                            </div>
+                        </div>
+
+                        <div class="docs-content">
+                            <h4>Available Endpoints</h4>
+                            <div class="endpoint-list">
+                                <div class="endpoint-item">
+                                    <span class="method get">GET</span>
+                                    <code>/api/status</code>
+                                    <span class="desc">System status and data availability</span>
+                                </div>
+                                <div class="endpoint-item">
+                                    <span class="method post">POST</span>
+                                    <code>/api/auth/login</code>
+                                    <span class="desc">Authenticate and get session token</span>
+                                </div>
+                                <div class="endpoint-item">
+                                    <span class="method get">GET</span>
+                                    <code>/force_start_pipeline</code>
+                                    <span class="desc">Trigger data pipeline (auth required)</span>
+                                </div>
+                                <div class="endpoint-item">
+                                    <span class="method get">GET</span>
+                                    <code>/api/combined_csv</code>
+                                    <span class="desc">Download combined Monday data</span>
+                                </div>
+                                <div class="endpoint-item">
+                                    <span class="method get">GET</span>
+                                    <code>/api/calendly/events</code>
+                                    <span class="desc">Live Calendly events extraction</span>
+                                </div>
+                                <div class="endpoint-item">
+                                    <span class="method get">GET</span>
+                                    <code>/api/calendly/invitees</code>
+                                    <span class="desc">Live Calendly invitees extraction</span>
+                                </div>
+                                <div class="endpoint-item">
+                                    <span class="method get">GET</span>
+                                    <code>/api/calendly/session/{type}</code>
+                                    <span class="desc">Cached session data (user/events/invitees)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Log Panel -->
+        <div class="log-panel" id="logPanel">
+            <div class="log-header">
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="4,17 10,11 4,5"/>
+                        <line x1="12" y1="19" x2="20" y2="19"/>
+                    </svg>
+                    Response Log
+                </h3>
+                <div class="log-actions">
+                    <button class="btn-icon" onclick="copyLogContent()" title="Copy to clipboard">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                        </svg>
+                    </button>
+                    <button class="btn-icon" onclick="toggleLogPanel()" title="Close">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="log-content" id="logContent">
+                <div class="log-placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="4,17 10,11 4,5"/>
+                        <line x1="12" y1="19" x2="20" y2="19"/>
+                    </svg>
+                    <p>Execute an action to see the response here</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
